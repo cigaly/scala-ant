@@ -20,9 +20,10 @@ import org.apache.tools.ant.types.{Path, Reference}
 import org.apache.tools.ant.util.{FileUtils, GlobPatternMapper, SourceFileScanner}
 import org.apache.tools.ant.util.facade.{FacadeTaskHelper, ImplementationSpecificArgument}
 
+import scala.reflect.internal.Reporter
 import scala.tools.nsc.{Global, Settings, CompilerCommand}
 import scala.tools.nsc.io.{Path => SPath}
-import scala.tools.nsc.reporters.{Reporter, ConsoleReporter}
+import scala.tools.nsc.reporters.ConsoleReporter
 
 /** An Ant task to compile with the new Scala compiler (NSC).
  *
@@ -202,7 +203,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `srcdir` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `origin`. */
-  def setSrcdir(input: Path) {
+  def setSrcdir(input: Path): Unit = {
     origin = setOrAppend(origin, input)
   }
 
@@ -217,16 +218,16 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `destdir` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `destination`. */
-  def setDestdir(input: File) { destination = Some(input) }
+  def setDestdir(input: File): Unit = { destination = Some(input) }
 
   /** Sets the `classpath` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `classpath`. */
-  def setClasspath(input: Path) {
+  def setClasspath(input: Path): Unit = {
     classpath = setOrAppend(classpath, input)
   }
   /** Sets the `compilerPath` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `compilerPath`. */
-  def setCompilerPath(input: Path) {
+  def setCompilerPath(input: Path): Unit = {
     compilerPath = setOrAppend(compilerPath, input)
   }
 
@@ -234,7 +235,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `compilerpathref` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `compilerpathref`. */
-  def setCompilerPathRef(input: Reference) {
+  def setCompilerPathRef(input: Reference): Unit = {
     createCompilerPath.setRefid(input)
   }
 
@@ -244,13 +245,13 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `classpath` as an external reference Ant parameter.
    *  @param input A reference to a class path. */
-  def setClasspathref(input: Reference) {
+  def setClasspathref(input: Reference): Unit = {
     createClasspath().setRefid(input)
   }
 
   /** Sets the `sourcepath` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `sourcepath`. */
-  def setSourcepath(input: Path) {
+  def setSourcepath(input: Path): Unit = {
     sourcepath = setOrAppend(sourcepath, input)
   }
 
@@ -260,14 +261,14 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `sourcepath` as an external reference Ant parameter.
    *  @param input A reference to a source path. */
-  def setSourcepathref(input: Reference) {
+  def setSourcepathref(input: Reference): Unit = {
     createSourcepath().setRefid(input)
   }
 
   /** Sets the boot classpath attribute. Used by [[http://ant.apache.org Ant]].
    *
    *  @param input The value of `bootclasspath`. */
-  def setBootclasspath(input: Path) {
+  def setBootclasspath(input: Path): Unit = {
     bootclasspath = setOrAppend(bootclasspath, input)
   }
 
@@ -283,7 +284,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the external extensions path attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `extdirs`. */
-  def setExtdirs(input: Path) {
+  def setExtdirs(input: Path): Unit = {
     extdirs = setOrAppend(extdirs, input)
   }
 
@@ -298,19 +299,19 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `argfile` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `argfile`. */
-  def setArgfile(input: File) {
+  def setArgfile(input: File): Unit = {
     argfile = Some(input)
   }
 
   /** Sets the `dependencyfile` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `dependencyfile`. */
-  def setDependencyfile(input: File) {
+  def setDependencyfile(input: File): Unit = {
     dependencyfile = Some(input)
   }
 
   /** Sets the `encoding` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `encoding`. */
-  def setEncoding(input: String) {
+  def setEncoding(input: String): Unit = {
     encoding = Some(input)
   }
 
@@ -322,29 +323,29 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `force` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value for `force`. */
-  def setForce(input: Boolean) { force = input }
+  def setForce(input: Boolean): Unit = { force = input }
 
   /** Sets the `fork` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value for `fork`. */
-  def setFork(input : Boolean) { fork = input }
+  def setFork(input : Boolean): Unit = { fork = input }
   /**
    * Sets the `jvmargs` attribute.  Used by [[http://ant.apache.org Ant]].
    * @param input The value for `jvmargs`
    */
-  def setJvmargs(input : String) {
+  def setJvmargs(input : String): Unit = {
     jvmArgs = Some(input)
   }
 
   /** Sets the logging level attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value for `logging`. */
-  def setLogging(input: String) {
+  def setLogging(input: String): Unit = {
     if (LoggingLevel.isPermissible(input)) logging = Some(input)
     else buildError("Logging level '" + input + "' does not exist.")
   }
 
   /** Sets the `logphase` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value for `logPhase`. */
-  def setLogPhase(input: String) {
+  def setLogPhase(input: String): Unit = {
     logPhase = input.split(",").toList.flatMap { s: String =>
       val st = s.trim()
       if (CompilerPhase.isPermissible(st))
@@ -357,63 +358,63 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Set the `debug` info attribute.
    *  @param input The value for `debug`. */
-  def setDebuginfo(input: String) { debugInfo = Some(input) }
+  def setDebuginfo(input: String): Unit = { debugInfo = Some(input) }
 
   /** Set the `addparams` info attribute.
    *  @param input The value for `addparams`. */
-  def setAddparams(input: String) { addParams = input }
+  def setAddparams(input: String): Unit = { addParams = input }
 
   /** Set the `explaintypes` info attribute.
    *  @param input One of the flags `yes/no` or `on/off`. */
-  def setExplaintypes(input: String) {
+  def setExplaintypes(input: String): Unit = {
     explaintypes = Flag toBoolean input orElse buildError("Unknown explaintypes flag '" + input + "'")
   }
 
   /** Set the `deprecation` info attribute.
    *  @param input One of the flags `yes/no` or `on/off`. */
-  def setDeprecation(input: String) {
+  def setDeprecation(input: String): Unit = {
     deprecation = Flag toBoolean input orElse buildError("Unknown deprecation flag '" + input + "'")
   }
 
   /** Set the `nobootcp` info attribute.
    *  @param input One of the flags `yes/no` or `on/off`. */
-  def setNobootcp(input: String) {
+  def setNobootcp(input: String): Unit = {
     nobootcp = Flag toBoolean input orElse buildError("Unknown nobootcp flag '" + input + "'")
   }
 
   /** Set the `nowarn` info attribute.
    *  @param input One of the flags `yes/no` or `on/off`. */
-  def setNowarn(input: String) {
+  def setNowarn(input: String): Unit = {
     nowarn = Flag toBoolean input orElse buildError("Unknown nowarn flag '" + input + "'")
   }
 
   /** Set the `optimise` info attribute.
    *  @param input One of the flags `yes/no` or `on/off`. */
-  def setOptimise(input: String) {
+  def setOptimise(input: String): Unit = {
     optimise = Flag toBoolean input orElse buildError("Unknown optimisation flag '" + input + "'")
   }
 
   /** Set the `unchecked` info attribute.
    *  @param input One of the flags `yes/no` or `on/off`. */
-  def setUnchecked(input: String) {
+  def setUnchecked(input: String): Unit = {
     unchecked = Flag toBoolean input orElse buildError("Unknown unchecked flag '" + input + "'")
   }
 
   /** Set the `usejavacp` info attribute.
    *  @param input One of the flags `yes/no` or `on/off`. */
-  def setUsejavacp(input: String) {
+  def setUsejavacp(input: String): Unit = {
     usejavacp = Flag toBoolean input orElse buildError("Unknown usejavacp flag '" + input + "'")
   }
 
   /** Sets the `failonerror` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value for `failonerror`. */
-  def setFailonerror(input: Boolean) { failonerror = input }
+  def setFailonerror(input: Boolean): Unit = { failonerror = input }
 
   /** Set the `scalacdebugging` info attribute. If set to
    *  `'''true'''`, the scalac ant task will print out the filenames
    *  being compiled.
    *  @param input The specified flag */
-  def setScalacdebugging(input: Boolean) { scalacDebugging = input }
+  def setScalacdebugging(input: Boolean): Unit = { scalacDebugging = input }
 
   /** Sets the `compilerarg` as a nested compilerarg Ant parameter.
    *  @return A compiler argument to be configured. */
@@ -625,7 +626,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
     (command.settings, sourceFiles, javaOnly)
   }
 
-  override def execute() {
+  override def execute(): Unit = {
     val (settings, sourceFiles, javaOnly) = initialize
     if (sourceFiles.isEmpty || javaOnly)
       return
@@ -634,7 +635,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
     else executeInternal(settings, sourceFiles)
   }
 
-  protected def executeFork(settings: Settings, sourceFiles: List[File]) {
+  protected def executeFork(settings: Settings, sourceFiles: List[File]): Unit = {
       val java = new Java(this)
       java setFork true
       // using 'setLine' creates multiple arguments out of a space-separated string
@@ -679,7 +680,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
   }
 
   /** Performs the compilation. */
-  protected def executeInternal(settings: Settings, sourceFiles : List[File]) {
+  protected def executeInternal(settings: Settings, sourceFiles : List[File]): Unit = {
     val reporter = new ConsoleReporter(settings)
     val compiler = newGlobal(settings, reporter)  // compiles the actual code
 
@@ -691,7 +692,8 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
         buildError("Compile failed because of an internal compiler error (" + msg + "); see the error output for details.")
     }
 
-    reporter.printSummary()
+    /*reporter.printSummary()*/
+    reporter.finish()
     if (reporter.hasErrors) {
       val msg = "Compile failed with %d error%s; see the compiler error output for details.".format(
         reporter.ERROR.count, plural(reporter.ERROR.count))

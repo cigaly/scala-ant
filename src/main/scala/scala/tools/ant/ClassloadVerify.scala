@@ -14,7 +14,7 @@ package scala.tools.ant
 
 import org.apache.tools.ant.Project
 import org.apache.tools.ant.types.{Path, Reference}
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import scala.tools.util.VerifyClass
 
 class ClassloadVerify extends ScalaMatchingTask {
@@ -24,11 +24,11 @@ class ClassloadVerify extends ScalaMatchingTask {
 
   /** Sets the `classpath` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `classpath`. */
-  def setClasspath(input: Path) {
+  def setClasspath(input: Path): Unit = {
     classpath = Some(input)
   }
 
-  def setClasspathref(input: Reference) {
+  def setClasspathref(input: Reference): Unit = {
     val p = new Path(getProject())
     p.setRefid(input)
     classpath = Some(p)
@@ -50,7 +50,7 @@ class ClassloadVerify extends ScalaMatchingTask {
       for((name, error) <- errors) {
          log(name + " failed verification with: " + error, Project.MSG_ERR)
       }
-      buildError(errors.size + " classload verification errors on " + results.size + " classes.")
+      buildError(s"${errors.size} classload verification errors on ${results.size} classes.")
     }
   }
 

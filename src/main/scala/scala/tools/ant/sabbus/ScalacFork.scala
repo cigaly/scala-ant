@@ -49,31 +49,31 @@ class ScalacFork extends ScalaMatchingTask with ScalacShared with TaskArgs {
 
   /** Sets the `srcdir` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `sourceDir`. */
-  def setSrcdir(input: File) {
+  def setSrcdir(input: File): Unit = {
     sourceDir = Some(input)
   }
 
   /** Sets the `failonerror` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `failOnError`. */
-  def setFailOnError(input: Boolean) {
+  def setFailOnError(input: Boolean): Unit = {
     failOnError = input
   }
 
   /** Sets the `timeout` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `timeout`. */
-  def setTimeout(input: Long) {
+  def setTimeout(input: Long): Unit = {
     timeout = Some(input)
   }
 
   /** Sets the `jvmargs` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `jvmArgs`. */
-  def setJvmArgs(input: String) {
+  def setJvmArgs(input: String): Unit = {
     jvmArgs = Some(input)
   }
 
   /** Sets the `argfile` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `argfile`. */
-  def setArgfile(input: File) {
+  def setArgfile(input: File): Unit = {
     argfile = Some(input)
   }
 
@@ -92,7 +92,7 @@ class ScalacFork extends ScalaMatchingTask with ScalacShared with TaskArgs {
     mapper
   }
 
-  override def execute() {
+  override def execute(): Unit = {
     def plural(x: Int) = if (x > 1) "s" else ""
 
     log("Executing ant task scalacfork, origin: %s".format(originOfThis), Project.MSG_VERBOSE)
@@ -138,7 +138,7 @@ class ScalacFork extends ScalaMatchingTask with ScalacShared with TaskArgs {
     java setClassname MainClass
 
     // Encode scalac/javac args for use in a file to be read back via "@file.txt"
-    def encodeScalacArgsFile(t: Traversable[String]) = t map { s =>
+    def encodeScalacArgsFile(t: Iterable[String]) = t map { s =>
       if(s.find(c => c <= ' ' || "\"'\\".contains(c)).isDefined)
         "\"" + s.flatMap(c => (if(c == '"' || c == '\\') "\\" else "") + c ) + "\""
       else s

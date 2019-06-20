@@ -17,13 +17,13 @@ import org.apache.tools.ant.Task
 
 class Break extends Task {
 
-  def setId(input: String) {
+  def setId(input: String): Unit = {
     id = Some(input)
   }
 
   private var id: Option[String] = None
 
-  override def execute() {
+  override def execute(): Unit = {
     if (id.isEmpty) sys.error("Attribute 'id' is not set")
     Compilers.break(id.get)
   }

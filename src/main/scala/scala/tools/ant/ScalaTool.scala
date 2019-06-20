@@ -114,7 +114,7 @@ class ScalaTool extends ScalaMatchingTask {
    * `%SCALA_HOME%`) can be specified in a platform independent way (e.g.
    * `@SCALA_HOME@`) and automatically translated for you.
    */
-  def setClassPath(input: String) {
+  def setClassPath(input: String): Unit = {
     classpath = classpath ::: input.split(",").toList
   }
 
@@ -130,7 +130,7 @@ class ScalaTool extends ScalaMatchingTask {
    * basedir or with an absolute path to a file in the filesystem.  As a result,
    * this is not a mechanism for setting the classpath for more general use scripts.
    */
-  def setClassPathRef(input: Reference) {
+  def setClassPathRef(input: Reference): Unit = {
     val tmpPath = emptyPath
     tmpPath.setRefid(input)
     classpath = classpath ::: tmpPath.list.toList
@@ -181,10 +181,10 @@ class ScalaTool extends ScalaMatchingTask {
 \*============================================================================*/
 
     // XXX encoding and generalize
-    private def getResourceAsCharStream(clazz: Class[_], resource: String): Stream[Char] = {
+    private def getResourceAsCharStream(clazz: Class[_], resource: String): LazyList[Char] = {
       val stream = clazz.getClassLoader() getResourceAsStream resource
-      if (stream == null) Stream.empty
-      else Stream continually stream.read() takeWhile (_ != -1) map (_.asInstanceOf[Char])
+      if (stream == null) LazyList.empty
+      else LazyList continually stream.read() takeWhile (_ != -1) map (_.asInstanceOf[Char])
     }
 
     // Converts a variable like @SCALA_HOME@ to ${SCALA_HOME} when pre = "${" and post = "}"

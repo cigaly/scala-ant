@@ -14,7 +14,7 @@ package scala.tools.ant.sabbus
 
 import java.net.URL
 
-object Compilers extends scala.collection.DefaultMap[String, Compiler] {
+object Compilers extends scala.collection.Map[String, Compiler] {
 
   val debug = false
 
@@ -46,4 +46,8 @@ object Compilers extends scala.collection.DefaultMap[String, Compiler] {
 
   private def freeMemoryString: String =
     (Runtime.getRuntime.freeMemory/1048576.0).formatted("%10.2f") + " MB"
+
+  def -(key1: String, key2: String, keys: String*): scala.collection.Map[String,scala.tools.ant.sabbus.Compiler] = ???
+
+  def -(key: String): scala.collection.Map[String,scala.tools.ant.sabbus.Compiler] = ???
 }
