@@ -173,7 +173,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value of `origin`.
    */
-  def setSrcdir(input: Path) {
+  def setSrcdir(input: Path): Unit = {
     if (origin.isEmpty) origin = Some(input)
     else origin.get.append(input)
   }
@@ -191,7 +191,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input A reference to an origin path.
    */
-  def setSrcref(input: Reference) {
+  def setSrcref(input: Reference): Unit = {
     createSrc().setRefid(input)
   }
 
@@ -199,7 +199,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value of `destination`.
    */
-  def setDestdir(input: File) {
+  def setDestdir(input: File): Unit = {
     destination = Some(input)
   }
 
@@ -207,7 +207,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value of `classpath`.
    */
-  def setClasspath(input: Path) {
+  def setClasspath(input: Path): Unit = {
     if (classpath.isEmpty) classpath = Some(input)
     else classpath.get.append(input)
   }
@@ -273,7 +273,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input A reference to a source path.
    */
-  def setBootclasspathref(input: Reference) {
+  def setBootclasspathref(input: Reference): Unit = {
     createBootclasspath().setRefid(input)
   }
 
@@ -281,7 +281,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value of `extdirs`.
    */
-  def setExtdirs(input: Path) {
+  def setExtdirs(input: Path): Unit = {
     if (extdirs.isEmpty) extdirs = Some(input)
     else extdirs.get.append(input)
   }
@@ -299,7 +299,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input A reference to an extensions path.
    */
-  def setExtdirsref(input: Reference) {
+  def setExtdirsref(input: Reference): Unit = {
     createExtdirs().setRefid(input)
   }
 
@@ -307,7 +307,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value of `encoding`.
    */
-  def setEncoding(input: String) {
+  def setEncoding(input: String): Unit = {
     encoding = Some(input)
   }
 
@@ -315,7 +315,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input A fully qualified class name of a doclet.
    */
-  def setDocgenerator(input: String) {
+  def setDocgenerator(input: String): Unit = {
     docgenerator = Some(input)
   }
 
@@ -325,7 +325,7 @@ class Scaladoc extends ScalaMatchingTask {
    * @param input The file from which the documentation content of the root
    * package will be taken.
    */
-  def setDocrootcontent(input : File) {
+  def setDocrootcontent(input : File): Unit = {
     docrootcontent = Some(input)
   }
 
@@ -333,7 +333,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value of `docversion`.
    */
-  def setDocversion(input: String) {
+  def setDocversion(input: String): Unit = {
     docversion = Some(input)
   }
 
@@ -341,7 +341,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value of `docsourceurl`.
    */
-  def setDocsourceurl(input: String) {
+  def setDocsourceurl(input: String): Unit = {
     docsourceurl = Some(input)
   }
 
@@ -349,7 +349,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value of `doctitle`.
    */
-  def setDoctitle(input: String) {
+  def setDoctitle(input: String): Unit = {
     doctitle = Some(input)
   }
 
@@ -357,7 +357,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value of `docfooter`.
    */
-  def setDocfooter(input: String) {
+  def setDocfooter(input: String): Unit = {
     docfooter = Some(input)
   }
 
@@ -365,7 +365,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input The value for `addparams`.
    */
-  def setAddparams(input: String) {
+  def setAddparams(input: String): Unit = {
     addParams = input
   }
 
@@ -373,7 +373,7 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input One of the flags `yes/no` or `on/off`.
    */
-  def setDeprecation(input: String) {
+  def setDeprecation(input: String): Unit = {
     if (Flag.isPermissible(input))
       deprecation = "yes".equals(input) || "on".equals(input)
     else
@@ -384,14 +384,14 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input One of the flags `yes/no` or `on/off`.
    */
-  def setUnchecked(input: String) {
+  def setUnchecked(input: String): Unit = {
     if (Flag.isPermissible(input))
       unchecked = "yes".equals(input) || "on".equals(input)
     else
       buildError("Unknown unchecked flag '" + input + "'")
   }
 
-  def setDocUncompilable(input: String) {
+  def setDocUncompilable(input: String): Unit = {
     docUncompilable = Some(input)
   }
 
@@ -686,7 +686,8 @@ class Scaladoc extends ScalaMatchingTask {
           reporter.WARNING.count + " warning" +
           (if (reporter.WARNING.count > 1) "s" else "") +
           "; see the documenter output for details.")
-      reporter.printSummary()
+      /*reporter.printSummary()*/
+      reporter.finish()
     } catch {
       case exception: Throwable =>
         exception.printStackTrace()
