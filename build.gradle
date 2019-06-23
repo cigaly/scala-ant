@@ -14,5 +14,5 @@ dependencies {
     compile 'org.scala-lang:scala-compiler:2.13.0'
     compile 'org.scala-lang:scala-reflect:2.13.0'
     compile 'org.scala-lang:scala-library:2.13.0'
-    compile 'org.apache.ant:ant:1.10.3'
+    compile 'org.apache.ant:ant:1.9.14'
 }
