@@ -19,7 +19,7 @@ import scala.tools.nsc.io
 trait ScalacShared extends ScalaMatchingTask {
   val MainClass = "scala.tools.nsc.Main"
 
-  def execWithArgFiles(java: Java, paths: List[String]) = {
+  def execWithArgFiles(java: Java, paths: List[String]): Int = {
     paths foreach (p => java.createArg() setValue ("@"+ p))
 
     val debugString = paths map (x => " (@ = '%s')".format(io.File(x).slurp())) mkString ""

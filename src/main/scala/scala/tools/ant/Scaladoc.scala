@@ -14,7 +14,7 @@ package scala.tools.ant
 
 import java.io.File
 
-import org.apache.tools.ant.Project
+import org.apache.tools.ant.{DirectoryScanner, Project}
 import org.apache.tools.ant.types.{Path, Reference}
 import org.apache.tools.ant.util.{FileUtils, GlobPatternMapper}
 
@@ -61,7 +61,7 @@ import scala.tools.nsc.doc.Settings
 class Scaladoc extends ScalaMatchingTask {
 
   /** The unique Ant file utilities instance to use in this task. */
-  private val fileUtils = FileUtils.getFileUtils()
+  private val fileUtils = FileUtils.getFileUtils
 
 /*============================================================================*\
 **                             Ant user-properties                            **
@@ -77,10 +77,10 @@ class Scaladoc extends ScalaMatchingTask {
    *  `unchecked` properties.
    */
   object Flag extends PermissibleValue {
-    val values = List("yes", "no", "on", "off")
+    val values: List[String] = List("yes", "no", "on", "off")
     def getBooleanValue(value: String, flagName: String): Boolean =
       if (Flag.isPermissible(value))
-        ("yes".equals(value) || "on".equals(value))
+        "yes".equals(value) || "on".equals(value)
       else
         buildError("Unknown " + flagName + " flag '" + value + "'")
   }
@@ -225,14 +225,14 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input A reference to a class path.
    */
-  def setClasspathref(input: Reference) =
+  def setClasspathref(input: Reference): Unit =
     createClasspath().setRefid(input)
 
   /** Sets the `sourcepath` attribute. Used by [[http://ant.apache.org Ant]].
    *
    *  @param input The value of `sourcepath`.
    */
-  def setSourcepath(input: Path) =
+  def setSourcepath(input: Path): Unit =
     if (sourcepath.isEmpty) sourcepath = Some(input)
     else sourcepath.get.append(input)
 
@@ -249,14 +249,14 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input A reference to a source path.
    */
-  def setSourcepathref(input: Reference) =
+  def setSourcepathref(input: Reference): Unit =
     createSourcepath().setRefid(input)
 
   /** Sets the `bootclasspath` attribute. Used by [[http://ant.apache.org Ant]].
    *
    *  @param input The value of `bootclasspath`.
    */
-  def setBootclasspath(input: Path) =
+  def setBootclasspath(input: Path): Unit =
     if (bootclasspath.isEmpty) bootclasspath = Some(input)
     else bootclasspath.get.append(input)
 
@@ -399,59 +399,59 @@ class Scaladoc extends ScalaMatchingTask {
    *
    *  @param input One of the flags `yes/no` or `on/off`. Default if no/off.
    */
-  def setNoFail(input: String) =
+  def setNoFail(input: String): Unit =
       nofail = Flag.getBooleanValue(input, "nofail")
 
   /** Set the `implicits` info attribute.
    *  @param input One of the flags `yes/no` or `on/off`. Default if no/off. */
-  def setImplicits(input: String) =
+  def setImplicits(input: String): Unit =
     docImplicits = Flag.getBooleanValue(input, "implicits")
 
   /** Set the `implicitsShowAll` info attribute to enable scaladoc to show all implicits, including those impossible to
    *  convert to from the default scope
    *  @param input One of the flags `yes/no` or `on/off`. Default if no/off. */
-  def setImplicitsShowAll(input: String) =
+  def setImplicitsShowAll(input: String): Unit =
     docImplicitsShowAll = Flag.getBooleanValue(input, "implicitsShowAll")
 
   /** Set the `implicitsDebug` info attribute so scaladoc outputs implicit conversion debug information
    *  @param input One of the flags `yes/no` or `on/off`. Default if no/off. */
-  def setImplicitsDebug(input: String) =
+  def setImplicitsDebug(input: String): Unit =
     docImplicitsDebug = Flag.getBooleanValue(input, "implicitsDebug")
 
   /** Set the `diagrams` bit so Scaladoc adds diagrams to the documentation
    *  @param input One of the flags `yes/no` or `on/off`. Default if no/off. */
-  def setDiagrams(input: String) =
+  def setDiagrams(input: String): Unit =
     docDiagrams = Flag.getBooleanValue(input, "diagrams")
 
   /** Set the `diagramsDebug` bit so Scaladoc outputs diagram building debug information
    *  @param input One of the flags `yes/no` or `on/off`. Default if no/off. */
-  def setDiagramsDebug(input: String) =
+  def setDiagramsDebug(input: String): Unit =
     docDiagramsDebug = Flag.getBooleanValue(input, "diagramsDebug")
 
   /** Set the `diagramsDotPath` attribute to the path where graphviz dot can be found (including the binary file name,
    *  eg: /usr/bin/dot) */
-  def setDiagramsDotPath(input: String) =
+  def setDiagramsDotPath(input: String): Unit =
     docDiagramsDotPath = Some(input)
 
   /** Set the `rawOutput` bit so Scaladoc also outputs text from each html file
    *  @param input One of the flags `yes/no` or `on/off`. Default if no/off. */
-  def setRawOutput(input: String) =
+  def setRawOutput(input: String): Unit =
     docRawOutput = Flag.getBooleanValue(input, "rawOutput")
 
   /** Set the `noPrefixes` bit to prevent Scaladoc from generating prefixes in
    *  front of types -- may lead to confusion, but significantly speeds up the generation.
    *  @param input One of the flags `yes/no` or `on/off`. Default if no/off. */
-  def setNoPrefixes(input: String) =
+  def setNoPrefixes(input: String): Unit =
     docNoPrefixes = Flag.getBooleanValue(input, "noPrefixes")
 
   /** Instruct the scaladoc tool to group similar functions together */
-  def setGroups(input: String) =
+  def setGroups(input: String): Unit =
     docGroups = Flag.getBooleanValue(input, "groups")
 
   /** Instruct the scaladoc tool to skip certain packages.
    *  @param input A colon-delimited list of fully qualified package names that will be skipped from scaladoc.
    */
-  def setSkipPackages(input: String) =
+  def setSkipPackages(input: String): Unit =
     docSkipPackages = input
 
 /*============================================================================*\
@@ -519,7 +519,7 @@ class Scaladoc extends ScalaMatchingTask {
   /** This is forwarding method to circumvent bug #281 in Scala 2. Remove when
    *  bug has been corrected.
    */
-  override protected def getDirectoryScanner(baseDir: java.io.File) =
+  override protected def getDirectoryScanner(baseDir: java.io.File): DirectoryScanner =
     super.getDirectoryScanner(baseDir)
 
   /** Transforms a string name into a file relative to the provided base
@@ -569,18 +569,18 @@ class Scaladoc extends ScalaMatchingTask {
    *  @return     A string-representation of the file like `/x/k/a.scala`.
    */
   private def asString(file: File): String =
-    file.getAbsolutePath()
+    file.getAbsolutePath
 
 /*============================================================================*\
 **                           The big execute method                           **
 \*============================================================================*/
 
   /** Initializes settings and source files */
-  protected def initialize: Tuple2[Settings, List[File]] = {
+  protected def initialize: (Settings, List[File]) = {
     // Tests if all mandatory attributes are set and valid.
     if (origin.isEmpty) buildError("Attribute 'srcdir' is not set.")
     if (getOrigin.isEmpty) buildError("Attribute 'srcdir' is not set.")
-    if (destination.isDefined && !destination.get.isDirectory())
+    if (destination.isDefined && !destination.get.isDirectory)
       buildError("Attribute 'destdir' does not refer to an existing directory.")
     if (destination.isEmpty) destination = Some(getOrigin.head)
 
@@ -596,9 +596,9 @@ class Scaladoc extends ScalaMatchingTask {
         originDir <- getOrigin
         originFile <- {
           val includedFiles =
-            getDirectoryScanner(originDir).getIncludedFiles()
+            getDirectoryScanner(originDir).getIncludedFiles
           val list = includedFiles.toList
-          if (list.length > 0)
+          if (list.nonEmpty)
             log(
               "Documenting " + list.length + " source file" +
               (if (list.length > 1) "s" else "") +
@@ -658,7 +658,7 @@ class Scaladoc extends ScalaMatchingTask {
     if(docDiagramsDotPath.isDefined) docSettings.docDiagramsDotPath.value = docDiagramsDotPath.get
 
     if (docgenerator.isDefined) docSettings.docgenerator.value = docgenerator.get
-    if (docrootcontent.isDefined) docSettings.docRootContent.value = docrootcontent.get.getAbsolutePath()
+    if (docrootcontent.isDefined) docSettings.docRootContent.value = docrootcontent.get.getAbsolutePath
     log("Scaladoc params = '" + addParams + "'", Project.MSG_DEBUG)
 
     docSettings processArgumentString addParams
@@ -668,7 +668,7 @@ class Scaladoc extends ScalaMatchingTask {
   def safeBuildError(message: String): Unit = if (nofail) log(message) else buildError(message)
 
   /** Performs the compilation. */
-  override def execute() = {
+  override def execute(): Unit = {
     val (docSettings, sourceFiles) = initialize
     val reporter = new ScalaDocReporter(docSettings)
     try {

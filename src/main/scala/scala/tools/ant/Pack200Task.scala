@@ -43,7 +43,7 @@ class Pack200Task extends ScalaMatchingTask {
   var keepFileOrder = false
   var keepModificationTime = false
   var repack = false
-  var segmentLimit = -1
+  var segmentLimit: Int = -1
 
   var packFileSuffix = ".pack"
 
@@ -99,12 +99,12 @@ class Pack200Task extends ScalaMatchingTask {
   private def getFileList: List[File] = {
     var files: List[File] = Nil
     val fs = getImplicitFileSet
-    val ds = fs.getDirectoryScanner(getProject())
-    val dir = fs.getDir(getProject())
-    for (filename <- ds.getIncludedFiles()
+    val ds = fs.getDirectoryScanner(getProject)
+    val dir = fs.getDir(getProject)
+    for (filename <- ds.getIncludedFiles
          if filename.toLowerCase.endsWith(".jar")) {
       val file = new File(dir, filename)
-      if(files.exists(file.equals(_)) == false) files = file :: files
+      if(!files.exists(file.equals(_))) files = file :: files
     }
     files.reverse
   }
@@ -124,7 +124,7 @@ class Pack200Task extends ScalaMatchingTask {
 \*============================================================================*/
 
   /** Performs the tool creation. */
-  override def execute() = {
+  override def execute(): Unit = {
     // Audits
     val packDir = destdir.getOrElse(buildError("No output directory specified"))
 

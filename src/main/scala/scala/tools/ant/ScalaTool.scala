@@ -46,7 +46,7 @@ class ScalaTool extends ScalaMatchingTask {
 
   /** Defines valid values for the platforms property. */
   object Platforms extends PermissibleValue {
-    val values = List("unix", "windows")
+    val values: List[String] = List("unix", "windows")
   }
 
   /** The path to the exec script file. `".bat"` will be appended for the
@@ -86,19 +86,19 @@ class ScalaTool extends ScalaMatchingTask {
 \*============================================================================*/
 
   /** Sets the file attribute. */
-  def setFile(input: File) =
+  def setFile(input: File): Unit =
     file = Some(input)
 
   /** Sets the main class attribute. */
-  def setClass(input: String) =
+  def setClass(input: String): Unit =
     mainClass = Some(input)
 
   /** Sets the platforms attribute. */
-  def setPlatforms(input: String) = {
+  def setPlatforms(input: String): Unit = {
     platforms = input.split(",").toList.flatMap { s: String =>
       val st = s.trim
       if (Platforms.isPermissible(st))
-        (if (input != "") List(st) else Nil)
+        if (input != "") List(st) else Nil
       else {
         buildError("Platform " + st + " does not exist.")
       }
@@ -137,7 +137,7 @@ class ScalaTool extends ScalaMatchingTask {
   }
 
   /** Sets JVM properties that will be set whilst running the tool. */
-  def setProperties(input: String) = {
+  def setProperties(input: String): Unit = {
     properties = input.split(",").toList.flatMap { s: String =>
       val st = s.trim
       val stArray = st.split("=", 2)
@@ -150,11 +150,11 @@ class ScalaTool extends ScalaMatchingTask {
   }
 
   /** Sets flags to be passed to the Java interpreter. */
-  def setJavaflags(input: String) =
+  def setJavaflags(input: String): Unit =
     javaFlags = input.trim
 
   /** Sets flags to be passed to the tool. */
-  def setToolflags(input: String) =
+  def setToolflags(input: String): Unit =
     toolFlags = input.trim
 
 /*============================================================================*\
@@ -182,7 +182,7 @@ class ScalaTool extends ScalaMatchingTask {
 
     // XXX encoding and generalize
     private def getResourceAsCharStream(clazz: Class[_], resource: String): LazyList[Char] = {
-      val stream = clazz.getClassLoader() getResourceAsStream resource
+      val stream = clazz.getClassLoader getResourceAsStream resource
       if (stream == null) LazyList.empty
       else LazyList continually stream.read() takeWhile (_ != -1) map (_.asInstanceOf[Char])
     }
@@ -234,8 +234,8 @@ class ScalaTool extends ScalaMatchingTask {
       builder.toString
     }
 
-    private def writeFile(file: File, content: String) =
-      if (file.exists() && !file.canWrite())
+    private def writeFile(file: File, content: String): Unit =
+      if (file.exists() && !file.canWrite)
         buildError("File " + file + " is not writable")
       else {
         val writer = new FileWriter(file, false)
@@ -248,7 +248,7 @@ class ScalaTool extends ScalaMatchingTask {
 \*============================================================================*/
 
   /** Performs the tool creation. */
-  override def execute() = {
+  override def execute(): Unit = {
     // Tests if all mandatory attributes are set and valid.
     if (file.isEmpty) buildError("Attribute 'file' is not set.")
     if (mainClass.isEmpty) buildError("Main class must be set.")
@@ -272,7 +272,7 @@ class ScalaTool extends ScalaMatchingTask {
       val winPatches = patches + (("classpath", getWinclasspath))
       val winTemplateResource = resourceRoot + "tool-windows.tmpl"
       val winTemplate = readAndPatchResource(winTemplateResource, winPatches)
-      writeFile(new File(file.get.getAbsolutePath() + ".bat"), winTemplate)
+      writeFile(new File(file.get.getAbsolutePath + ".bat"), winTemplate)
     }
   }
 

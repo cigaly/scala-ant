@@ -25,7 +25,7 @@ trait ScalaTask {
    * @throws BuildException A build error exception thrown in every case.
    */
    protected def buildError(message: String): Nothing =
-     throw new BuildException(message, getLocation())
+     throw new BuildException(message, getLocation)
 }
 
 abstract class ScalaMatchingTask extends MatchingTask with ScalaTask

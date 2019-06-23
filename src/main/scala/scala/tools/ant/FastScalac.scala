@@ -95,10 +95,10 @@ class FastScalac extends Scalac {
     // initialize fsc specific settings
     val s = settings.asInstanceOf[FscSettings] // safe (newSettings)
     s.reset.value = resetCaches
-    if (!serverAddr.isEmpty) s.server.value = serverAddr.get
+    if (serverAddr.isDefined) s.server.value = serverAddr.get
     s.shutdown.value = shutdownServer
     s.preferIPv4.value = useIPv4
-    if (!idleMinutes.isEmpty) s.idleMins.value = idleMinutes.get
+    if (idleMinutes.isDefined) s.idleMins.value = idleMinutes.get
 
     val stringSettings =
       List(
@@ -174,8 +174,9 @@ class FastScalac extends Scalac {
 
     // Encode scalac/javac args for use in a file to be read back via "@file.txt"
     def encodeScalacArgsFile(t: Iterable[String]) = t map { s =>
-      if(s.find(c => c <= ' ' || "\"'\\".contains(c)).isDefined)
-        "\"" + s.flatMap(c => (if(c == '"' || c == '\\') "\\" else "") + c ) + "\""
+      if(s.exists(c => c <= ' ' || "\"'\\".contains(c))) {
+        "\"" + s.flatMap(c => (if (c == '"' || c == '\\') "\\" else "") + c) + "\""
+      }
       else s
     } mkString "\n"
 
