@@ -15,6 +15,8 @@ package scala.tools.ant.sabbus
 import java.io.File
 import java.net.URL
 import java.lang.reflect.InvocationTargetException
+
+import scala.collection.immutable.ArraySeq.unsafeWrapArray
 import scala.reflect.internal.util.ScalaClassLoader
 
 class Compiler(classpath: Array[URL], val settings: Settings)

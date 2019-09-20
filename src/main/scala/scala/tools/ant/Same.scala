@@ -54,16 +54,16 @@ import org.apache.tools.ant.types.Mapper
 **                             Properties setters                             **
 \*============================================================================*/
 
-  def setDir(input: File) =
+  def setDir(input: File): Unit =
     origin = Some(input)
 
-  def setTodir(input: File) =
+  def setTodir(input: File): Unit =
     destination = Some(input)
 
-  def setResultproperty(input: String) =
+  def setResultproperty(input: String): Unit =
     resultProperty = Some(input)
 
-  def setFailondifferent(input: Boolean) =
+  def setFailondifferent(input: Boolean): Unit =
     failing = input
 
   def createMapper(): Mapper =
@@ -74,7 +74,7 @@ import org.apache.tools.ant.types.Mapper
     }
     else throw new BuildException("Cannot define more than one mapper", getLocation)
 
-  def add(fileNameMapper: FileNameMapper) =
+  def add(fileNameMapper: FileNameMapper): Unit =
     createMapper().add(fileNameMapper)
 
 /*============================================================================*\
@@ -95,17 +95,17 @@ import org.apache.tools.ant.types.Mapper
   private var allEqualNow = true
 
   /** Tests if all mandatory attributes are set and valid. */
-  private def validateAttributes() = {
+  private def validateAttributes(): Unit = {
     if (origin.isEmpty) sys.error("Mandatory attribute 'dir' is not set.")
     if (destination.isEmpty) sys.error("Mandatory attribute 'todir' is not set.")
   }
 
-  private def reportDiff(f1: File, f2: File) = {
+  private def reportDiff(f1: File, f2: File): Unit = {
     allEqualNow = false
     log("File '" + f1 + "' is different from correspondant.")
   }
 
-  private def reportMissing(f1: File) = {
+  private def reportMissing(f1: File): Unit = {
     allEqualNow = false
     log("File '" + f1 + "' has no correspondant.")
   }
@@ -114,7 +114,7 @@ import org.apache.tools.ant.types.Mapper
 **                           The big execute method                           **
 \*============================================================================*/
 
-  override def execute() = {
+  override def execute(): Unit = {
     validateAttributes()
     val mapper = getMapper
     allEqualNow = true
@@ -149,8 +149,8 @@ import org.apache.tools.ant.types.Mapper
           equalNow = false
         if (!equalNow)
           reportDiff(originFile, destFile)
-        originStream.close
-        destStream.close
+        originStream.close()
+        destStream.close()
       }
       else reportMissing(originFile)
     }
@@ -160,7 +160,7 @@ import org.apache.tools.ant.types.Mapper
       else
         log("There were differences between '" + origin.get + "' and '" + destination.get + "'")
     else {
-      if (!resultProperty.isEmpty)
+      if (resultProperty.isDefined)
         getProject.setProperty(resultProperty.get, "yes")
       log("All files in '" + origin.get + "' and '" + destination.get + "' are equal", Project.MSG_VERBOSE)
     }

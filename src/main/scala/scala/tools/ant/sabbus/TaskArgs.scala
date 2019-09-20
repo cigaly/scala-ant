@@ -28,7 +28,7 @@ trait CompilationPathProperty {
   }
 
   def createCompilationPath: Path = {
-    if (compilationPath.isEmpty) compilationPath = Some(new Path(getProject()))
+    if (compilationPath.isEmpty) compilationPath = Some(new Path(getProject))
     compilationPath.get.createPath()
   }
 
@@ -64,7 +64,7 @@ trait TaskArgs extends CompilationPathProperty {
   }
 
   def createSrcPath: Path = {
-    if (sourcePath.isEmpty) sourcePath = Some(new Path(getProject()))
+    if (sourcePath.isEmpty) sourcePath = Some(new Path(getProject))
     sourcePath.get.createPath()
   }
 
@@ -78,7 +78,7 @@ trait TaskArgs extends CompilationPathProperty {
   }
 
   def createCompilerPath: Path = {
-    if (compilerPath.isEmpty) compilerPath = Some(new Path(getProject()))
+    if (compilerPath.isEmpty) compilerPath = Some(new Path(getProject))
     compilerPath.get.createPath()
   }
 

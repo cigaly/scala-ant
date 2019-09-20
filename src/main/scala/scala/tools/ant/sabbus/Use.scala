@@ -45,7 +45,7 @@ class Use extends ScalaMatchingTask {
     if (id.isEmpty) sys.error("Mandatory attribute 'id' is not set.")
     if (sourceDir.isEmpty) sys.error("Mandatory attribute 'srcdir' is not set.")
     val compiler = Compilers(id.get)
-    if (!destinationDir.isEmpty) compiler.settings.d = destinationDir.get
+    if (destinationDir.isDefined) compiler.settings.d = destinationDir.get
     val mapper = new GlobPatternMapper()
     mapper.setTo("*.class")
     mapper.setFrom("*.scala")
@@ -67,7 +67,7 @@ class Use extends ScalaMatchingTask {
       }
       catch {
         case CompilationFailure(msg, ex) =>
-          ex.printStackTrace
+          ex.printStackTrace()
           val errorMsg =
             "Compilation failed because of an internal compiler error (" + msg + "); see the error output for details."
           if (failOnError) sys.error(errorMsg) else log(errorMsg)

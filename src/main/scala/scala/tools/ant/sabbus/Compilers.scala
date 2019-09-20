@@ -20,11 +20,11 @@ object Compilers extends scala.collection.Map[String, Compiler] {
 
   private val container = new scala.collection.mutable.HashMap[String, Compiler]
 
-  def iterator = container.iterator
+  def iterator: Iterator[(String, Compiler)] = container.iterator
 
-  def get(id: String) = container.get(id)
+  def get(id: String): Option[Compiler] = container.get(id)
 
-  override def size = container.size
+  override def size: Int = container.size
 
   def make(id: String, classpath: Array[URL], settings: Settings): Compiler = {
     if (debug) println("Making compiler " + id)

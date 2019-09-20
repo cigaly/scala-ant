@@ -139,7 +139,7 @@ class ScalacFork extends ScalaMatchingTask with ScalacShared with TaskArgs {
 
     // Encode scalac/javac args for use in a file to be read back via "@file.txt"
     def encodeScalacArgsFile(t: Iterable[String]) = t map { s =>
-      if(s.find(c => c <= ' ' || "\"'\\".contains(c)).isDefined)
+      if(s.exists(c => c <= ' ' || "\"'\\".contains(c)))
         "\"" + s.flatMap(c => (if(c == '"' || c == '\\') "\\" else "") + c ) + "\""
       else s
     } mkString "\n"

@@ -72,7 +72,7 @@ import scala.tools.nsc.reporters.ConsoleReporter
 class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** The unique Ant file utilities instance to use in this task. */
-  private val fileUtils = FileUtils.getFileUtils()
+  private val fileUtils = FileUtils.getFileUtils
 
 /*============================================================================*\
 **                             Ant user-properties                            **
@@ -86,12 +86,12 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Defines valid values for the logging property. */
   object LoggingLevel extends PermissibleValue {
-    val values = List("none", "verbose", "debug")
+    val values: List[String] = List("none", "verbose", "debug")
   }
 
   /** Defines valid values for properties that refer to compiler phases. */
   object CompilerPhase extends PermissibleValue {
-    val values = List("namer", "typer", "pickler", "refchecks",
+    val values: List[String] = List("namer", "typer", "pickler", "refchecks",
                       "uncurry", "tailcalls", "specialize", "explicitouter",
                       "erasure", "fields", "lambdalift", "constructors",
                       "flatten", "mixin", "delambdafy", "cleanup",
@@ -100,13 +100,13 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Defines valid values for the `target` property. */
   object Target extends PermissibleValue {
-    val values = List("jvm-1.5", "jvm-1.6", "jvm-1.7", "jvm-1.8")
+    val values: List[String] = List("jvm-1.5", "jvm-1.6", "jvm-1.7", "jvm-1.8")
   }
 
   /** Defines valid values for the `deprecation` and `unchecked` properties. */
   object Flag extends PermissibleValue {
-    val values = List("yes", "no", "on", "off", "true", "false")
-    def toBoolean(flag: String) =
+    val values: List[String] = List("yes", "no", "on", "off", "true", "false")
+    def toBoolean(flag: String): Option[Boolean] =
       if (flag == "yes" || flag == "on" || flag == "true") Some(true)
       else if (flag == "no" || flag == "off" || flag == "false") Some(false)
       else None
@@ -658,7 +658,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
       // Write all settings to a temporary file
       def writeSettings(): File = {
-        def escapeArgument(arg : String) = if (arg matches ".*\\s.*") '"' + arg + '"' else arg
+        def escapeArgument(arg : String) = if (arg matches ".*\\s.*") s""""$arg"""" else arg
         val file = File.createTempFile("scalac-ant-",".args")
         file.deleteOnExit()
         val out = new PrintWriter(new BufferedWriter(new FileWriter(file)))

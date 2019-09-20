@@ -29,14 +29,14 @@ class ClassloadVerify extends ScalaMatchingTask {
   }
 
   def setClasspathref(input: Reference): Unit = {
-    val p = new Path(getProject())
+    val p = new Path(getProject)
     p.setRefid(input)
     classpath = Some(p)
   }
 
   private def getClasspath: Array[String] = classpath match {
     case None     => buildError("Member 'classpath' is empty.")
-    case Some(x)  => x.list.toArray
+    case Some(x)  => x.list
   }
 
   override def execute(): Unit = {
@@ -48,7 +48,7 @@ class ClassloadVerify extends ScalaMatchingTask {
       log("Classload verification succeeded with " + results.size + " classes.", Project.MSG_INFO)
     } else {
       for((name, error) <- errors) {
-         log(name + " failed verification with: " + error, Project.MSG_ERR)
+         log(s"$name failed verification with: $error", Project.MSG_ERR)
       }
       buildError(s"${errors.size} classload verification errors on ${results.size} classes.")
     }
