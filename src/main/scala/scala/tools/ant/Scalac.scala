@@ -212,7 +212,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `origin` as a nested src Ant parameter.
    *  @return An origin path to be configured. */
-  def createSrc(): Path = createNewPath(origin _, p => origin = p)
+  def createSrc(): Path = createNewPath(() => origin, p => origin = p)
 
   /** Sets the `origin` as an external reference Ant parameter.
    *  @param input A reference to an origin path. */
@@ -234,7 +234,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
     compilerPath = setOrAppend(compilerPath, input)
   }
 
-  def createCompilerPath: Path = createNewPath(compilerPath _, p => compilerPath = p)
+  def createCompilerPath: Path = createNewPath(() => compilerPath, p => compilerPath = p)
 
   /** Sets the `compilerpathref` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value of `compilerpathref`. */
@@ -244,7 +244,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `classpath` as a nested classpath Ant parameter.
    *  @return A class path to be configured. */
-  def createClasspath(): Path = createNewPath(classpath _, p => classpath = p)
+  def createClasspath(): Path = createNewPath(() => classpath, p => classpath = p)
 
   /** Sets the `classpath` as an external reference Ant parameter.
    *  @param input A reference to a class path. */
@@ -260,7 +260,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `sourcepath` as a nested sourcepath Ant parameter.
    *  @return A source path to be configured. */
-  def createSourcepath(): Path = createNewPath(sourcepath _, p => sourcepath = p)
+  def createSourcepath(): Path = createNewPath(() => sourcepath, p => sourcepath = p)
 
   /** Sets the `sourcepath` as an external reference Ant parameter.
    *  @param input A reference to a source path. */
@@ -277,7 +277,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `bootclasspath` as a nested bootclasspath Ant parameter.
    *  @return A source path to be configured. */
-  def createBootclasspath(): Path = createNewPath(bootclasspath _, p => bootclasspath = p)
+  def createBootclasspath(): Path = createNewPath(() => bootclasspath, p => bootclasspath = p)
 
   /** Sets the `bootclasspath` as an external reference Ant
    *  parameter.
@@ -293,7 +293,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
 
   /** Sets the `extdirs` as a nested extdirs Ant parameter.
    *  @return An extensions path to be configured. */
-  def createExtdirs(): Path = createNewPath(extdirs _, p => extdirs = p)
+  def createExtdirs(): Path = createNewPath(() => extdirs, p => extdirs = p)
 
   /** Sets the `extdirs` as an external reference Ant parameter.
    *  @param input A reference to an extensions path. */

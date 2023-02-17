@@ -45,7 +45,7 @@ object Compilers extends scala.collection.Map[String, Compiler] {
   }
 
   private def freeMemoryString: String =
-    (Runtime.getRuntime.freeMemory/1048576.0).formatted("%10.2f") + " MB"
+    "%10.2f MB".format(Runtime.getRuntime.freeMemory/1048576.0)
 
   def -(key1: String, key2: String, keys: String*): scala.collection.Map[String,scala.tools.ant.sabbus.Compiler] = ???
 
