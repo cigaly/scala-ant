@@ -137,6 +137,9 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
   // the targeted backend
   protected var backend: Option[String] = None
 
+  /** Java API and target class file version. */
+  protected var release: Option[String] = None
+
   /** Whether to force compilation of all files or not. */
   protected var force: Boolean = false
   /** Whether to fork the execution of scalac */
@@ -320,6 +323,14 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
   def setTarget(input: String): Unit =
     if (Target.isPermissible(input)) backend = Some(input)
     else buildError("Unknown target '" + input + "'")
+
+  /** Sets the `release` attribute. Used by [[http://ant.apache.org Ant]].
+   *
+   * @param input The value for `release`. */
+  def setRelease(input: String): Unit = {
+    // Since scala 2.13.9 `release` no longer accepts empty string as a valid value.
+    if (input.nonEmpty) release = Some(input)
+  }
 
   /** Sets the `force` attribute. Used by [[http://ant.apache.org Ant]].
    *  @param input The value for `force`. */
@@ -587,6 +598,7 @@ class Scalac extends ScalaMatchingTask with ScalacShared {
       settings.dependencyfile.value = asString(dependencyfile.get)
     if (!encoding.isEmpty) settings.encoding.value = encoding.get
     if (!backend.isEmpty) settings.target.value = backend.get
+    if (!release.isEmpty) settings.release.value = release.get
     if (!logging.isEmpty && logging.get == "verbose")
       settings.verbose.value = true
     else if (!logging.isEmpty && logging.get == "debug") {
