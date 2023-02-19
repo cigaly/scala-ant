@@ -3,7 +3,7 @@ apply plugin: 'maven'
 
 group = 'org.scala-lang'
 project.archivesBaseName = 'scala-ant'
-version = scalaVersion
+version = scalaAntVersion
 
 repositories {
     mavenLocal()
